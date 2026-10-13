@@ -53,23 +53,41 @@
             font-family: 'Outfit', sans-serif;
         }
 
+        /* TEMA GLASSMORPHISM PENUH */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.45) !important;
+            backdrop-filter: blur(25px) !important;
+            -webkit-backdrop-filter: blur(25px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
         }
 
-        .glass-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .glass-item {
+            background: rgba(255, 255, 255, 0.06) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
             transition: all 0.25s ease;
         }
 
-        .glass-btn:hover {
-            background: rgba(0, 210, 255, 0.06);
-            border-color: rgba(0, 210, 255, 0.4);
-            transform: translateY(-1px);
+        .glass-item:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            transform: translateY(-2px);
+        }
+
+        .glass-enter-btn {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-enter-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 25px -5px rgba(255, 255, 255, 0.15);
         }
 
         ::-webkit-scrollbar {
@@ -87,10 +105,20 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-3 sm:p-6 relative select-none">
+<body class="min-h-screen flex items-center justify-center p-3.5 sm:p-7 relative select-none">
 
     <!-- Canvas Background -->
     <canvas id="bgCanvas" class="fixed inset-0 w-full h-full -z-10 opacity-30 pointer-events-none"></canvas>
+
+    <!-- AUDIO INTRO/WELCOME -->
+    <audio id="welcomeAudio" loop preload="auto">
+        <source src="https://cdn.zass.in/zLUC4sdMi3.mpeg" type="audio/mpeg">
+    </audio>
+
+    <!-- AUDIO UTAMA/PROFIL -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://cdn.zass.in/n9Rj1dZcGh.mpeg" type="audio/mpeg">
+    </audio>
 
     <!-- 1. FULLSCREEN WELCOME SCREEN -->
     <div id="welcomeLayer" class="fixed inset-0 z-50 flex items-end justify-center w-full h-full transition-all duration-700 ease-out overflow-hidden bg-black">
@@ -108,72 +136,75 @@
 
         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none z-10"></div>
 
+        <!-- TEKS ANIMASI MENGETIK -->
+        <div id="typedContainer" class="absolute top-[58%] sm:top-[56%] left-6 sm:left-10 z-30 max-w-[230px] sm:max-w-[270px] opacity-0 transition-opacity duration-300 pointer-events-none text-left">
+            <p id="typedText" class="text-sm sm:text-base font-extrabold text-white tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,1)] leading-relaxed transition-opacity duration-200"></p>
+        </div>
+
+        <!-- Tombol Toggle Sound di Kanan Atas (Merah) -->
+        <button id="soundToggleBtn" class="absolute top-4 right-4 z-30 p-3 rounded-full bg-black/60 border border-red-500/30 text-white backdrop-blur-md transition-all duration-300 hover:bg-black/80 hover:border-red-500/60 active:scale-95 flex items-center justify-center shadow-lg shadow-red-500/10" title="Mute / Unmute Sound">
+            <i id="soundIcon" class="fa-solid fa-volume-xmark text-red-500 text-lg"></i>
+        </button>
+
+        <!-- KONTAINER BADGE & TOMBOL MASUK -->
         <div class="relative z-20 w-full max-w-sm px-6 pb-12 text-center flex flex-col items-center">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 border border-white/10 mb-4">
-                <span class="w-2 h-2 rounded-full bg-brand-blue animate-pulse"></span>
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/70 border border-white/10 mb-4 backdrop-blur-md">
                 <span class="text-xs font-bold tracking-widest text-white uppercase font-display">YANNSTR</span>
             </div>
 
-            <button id="enterBtn" class="w-full py-3.5 rounded-xl bg-brand-blue text-black font-bold text-sm tracking-wider shadow-lg shadow-brand-blue/20 transition-all duration-300 hover:bg-white hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                <span class="font-display uppercase">MASUK PROFIL</span>
-                <i class="fa-solid fa-arrow-right text-xs"></i>
+            <button id="enterBtn" class="glass-enter-btn w-full py-3.5 rounded-xl text-white font-bold text-sm tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center">
+                <span class="font-display uppercase tracking-widest">MASUK PROFIL</span>
             </button>
         </div>
     </div>
 
-    <!-- BACKGROUND AUDIO MUSIC -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://cdn.zass.in/n9Rj1dZcGh.mpeg" type="audio/mpeg">
-    </audio>
-
-    <!-- 2. MAIN PROFILE CONTAINER (Responsive Max-Width & Padding) -->
-    <main id="mainCard" class="w-full max-w-[420px] sm:max-w-[440px] mx-auto transition-all duration-700 relative z-10 my-auto">
-        <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl relative border border-white/10">
+    <!-- 2. MAIN PROFILE CONTAINER (PAS & LEBIH LEGA DIKIT) -->
+    <main id="mainCard" class="w-full max-w-[435px] sm:max-w-[465px] mx-auto transition-all duration-700 relative z-10 my-auto">
+        <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl relative">
             
             <!-- A. BANNER SHOWCASE -->
-            <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden">
+            <div class="relative w-full h-38 sm:h-46 bg-slate-950 overflow-hidden">
                 <img id="gameBanner" 
                      src="https://img3.pixhost.to/images/6392/783382213_media_1791869025159.jpg" 
                      class="w-full h-full object-cover"
                      onerror="this.src='https://placehold.co/1200x675/0a0d14/00d2ff?text=Game+Showcase'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-card via-black/30 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-black/20 to-transparent"></div>
             </div>
 
             <!-- B. PROFILE CONTENT -->
-            <div class="px-5 sm:px-6 pb-6 relative pt-0">
+            <div class="px-5.5 sm:px-6.5 pb-6.5 relative pt-0">
                 
-                <!-- AVATAR & BADGES -->
-                <div class="flex items-end justify-between -mt-12 sm:-mt-14 mb-4 relative z-10">
+                <!-- AVATAR (GLASS) & BADGES -->
+                <div class="flex items-end justify-between -mt-13 sm:-mt-15 mb-4.5 relative z-10">
                     <div class="relative">
-                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl p-0.5 bg-brand-blue shadow-lg shadow-brand-blue/20">
+                        <div class="w-21 h-21 sm:w-25 sm:h-25 rounded-2xl p-0.5 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
                             <img id="jbAvatar" 
                                  src="https://img3.pixhost.to/images/6392/783382171_media_1791869015731.jpg" 
                                  alt="JB Profile -yannstr" 
                                  class="w-full h-full object-cover rounded-[14px]"
                                  onerror="this.src='https://placehold.co/400x400/0d111a/00d2ff?text=-yannstr'" />
                         </div>
-                        <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-brand-card rounded-full" title="Online"></span>
+                        <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-slate-900 rounded-full" title="Online"></span>
                     </div>
 
-                    <div class="flex gap-2">
-                        <div class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <div class="flex gap-2 items-center">
+                        <div class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold flex items-center gap-1.5 shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                             <span>FAST RESPON</span>
                         </div>
-                        <div class="px-2.5 py-1 rounded-lg bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-[11px] font-semibold flex items-center gap-1">
-                            <i class="fa-solid fa-shield-halved text-[10px]"></i>
-                            <span>AMAN</span>
+                        <div class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/15 text-gray-200 text-[11px] font-semibold flex items-center gap-1 shrink-0">
+                            <i class="fa-solid fa-shield-halved text-[10px] text-brand-blue"></i>
+                            <span>100% AMAN</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- HEADER NAME & VERIFIED BADGE SVG -->
-                <div class="mb-4">
+                <div class="mb-4.5">
                     <div class="flex items-center gap-2">
-                        <h1 class="text-2xl font-extrabold text-white tracking-tight font-display">YannStr</h1>
-                        <!-- Verified Badge SVG (Posisi Diturunkan Pas dengan relative top-[2px]) -->
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">YannStr</h1>
                         <span class="inline-flex items-center align-middle cursor-default relative top-[2px] animate-verified-pop opacity-0 scale-0" title="Verified Profile">
-                            <svg aria-label="Verified" width="20" height="20" viewBox="0 0 40 40" fill="#0095F6" xmlns="http://www.w3.org/2000/svg" class="shrink-0 inline-block drop-shadow-[0_0_8px_rgba(0,149,246,0.5)]">
+                            <svg aria-label="Verified" width="21" height="21" viewBox="0 0 40 40" fill="#0095F6" xmlns="http://www.w3.org/2000/svg" class="shrink-0 inline-block drop-shadow-[0_0_8px_rgba(0,149,246,0.5)]">
                                 <path fill-rule="evenodd" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"/>
                             </svg>
                         </span>
@@ -182,25 +213,25 @@
                 </div>
 
                 <!-- INFO CARDS (REGION & STATUS) -->
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    <div class="glass-btn p-3 rounded-xl flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-brand-blue/10 border border-brand-blue/20 flex items-center justify-center text-brand-blue text-xs shrink-0">
+                <div class="grid grid-cols-2 gap-3 mb-4.5">
+                    <div class="glass-item p-3.5 rounded-xl flex items-center gap-2.5 min-w-0">
+                        <div class="w-8.5 h-8.5 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-brand-blue text-xs shrink-0">
                             <i class="fa-solid fa-earth-asia"></i>
                         </div>
-                        <div class="overflow-hidden">
+                        <div class="overflow-hidden min-w-0">
                             <p class="text-[9px] text-gray-400 font-bold uppercase">Region</p>
-                            <p class="text-xs font-semibold text-gray-200 truncate">IND | Bali 🇮🇩</p>
+                            <p class="text-xs sm:text-sm font-semibold text-gray-200 truncate">IND | Bali 🇮🇩</p>
                         </div>
                     </div>
 
-                    <div class="glass-btn p-3 rounded-xl flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-brand-blue/10 border border-brand-blue/20 flex items-center justify-center text-brand-blue text-xs shrink-0">
+                    <div class="glass-item p-3.5 rounded-xl flex items-center gap-2.5 min-w-0">
+                        <div class="w-8.5 h-8.5 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 text-xs shrink-0">
                             <i class="fa-solid fa-bolt"></i>
                         </div>
-                        <div class="overflow-hidden">
+                        <div class="overflow-hidden min-w-0">
                             <p class="text-[9px] text-gray-400 font-bold uppercase">Status</p>
-                            <p class="text-xs font-semibold text-emerald-400 truncate flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <p class="text-xs sm:text-sm font-semibold text-emerald-400 truncate flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
                                 Online
                             </p>
                         </div>
@@ -208,77 +239,77 @@
                 </div>
 
                 <!-- ABOUT ME -->
-                <div class="mb-4 glass-btn p-3.5 rounded-xl">
-                    <h2 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <div class="mb-4.5 glass-item p-3.5 sm:p-4 rounded-xl">
+                    <h2 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                         <i class="fa-solid fa-user text-brand-blue"></i> Tentang Saya
                     </h2>
-                    <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">
-                        Halo! Nama saya <strong class="text-white">Yann</strong> pelajar 11 TJKT berusia 16 tahun asal Karangasem, Bali.
-Menyediakan jasa JB (Jual Beli) Akun & Rental Akun terpercaya. keamanan dan kepuasan pelanggan dalam setiap transaksi selalu jadi prioritas utama.
-<strong class="text-white">butuh akun? atau nyari rental akun?</strong> langsung hubungi medsos di bawah
+                    <p class="text-gray-300 text-xs sm:text-sm leading-relaxed break-words">
+                        Halo! Nama saya <strong class="text-white">Yann</strong>, seorang pelajar jurusan 11 TJKT berusia 16 tahun asal Karangasem, Bali.<br><br>
+                        Saya menyediakan jasa <strong>Jual Beli (JB) Akun & Rental Akun</strong> terpercaya. Keamanan, kenyamanan, serta kepuasan pelanggan dalam setiap transaksi selalu menjadi prioritas utama saya.<br><br>
+                        <strong class="text-brand-blue">Butuh akun atau mau sewa rental akun?</strong> Langsung hubungi media sosial saya di bawah!
                     </p>
                 </div>
 
                 <!-- SOCIAL MEDIA BUTTONS -->
-                <div class="space-y-2.5">
-                    <h2 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-paper-plane text-brand-blue"></i> Contact & MEDSOS
+                <div class="space-y-3">
+                    <h2 class="text-xs font-extrabold text-gray-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-paper-plane text-brand-blue text-sm"></i> Contact & MEDSOS
                     </h2>
 
                     <!-- WhatsApp -->
-                    <a href="https://wa.me/6285801134620?text=hallo+bang+yann" target="_blank" rel="noopener noreferrer" class="glass-btn w-full p-3 rounded-xl flex items-center justify-between group text-white">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base">
+                    <a href="https://wa.me/6285801134620?text=hallo+bang+yann" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </div>
-                            <div class="text-left">
-                                <p class="text-xs sm:text-sm font-bold group-hover:text-brand-blue transition-colors">WhatsApp Direct</p>
-                                <p class="text-[10px] text-gray-400">Order / Transaksi</p>
+                            <div class="text-left min-w-0">
+                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">WhatsApp Direct</p>
+                                <p class="text-xs text-gray-400 truncate">Order / Transaksi</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-brand-blue"></i>
+                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
 
                     <!-- Instagram -->
-                    <a href="https://instagram.com/yann16b" target="_blank" rel="noopener noreferrer" class="glass-btn w-full p-3 rounded-xl flex items-center justify-between group text-white">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-lg bg-brand-blue/10 text-brand-blue flex items-center justify-center text-base">
+                    <a href="https://instagram.com/yann16b" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-white/5 text-gray-200 flex items-center justify-center text-xl shrink-0">
                                 <i class="fa-brands fa-instagram"></i>
                             </div>
-                            <div class="text-left">
-                                <p class="text-xs sm:text-sm font-bold group-hover:text-brand-blue transition-colors">Instagram</p>
-                                <p class="text-[10px] text-gray-400">@yannstr • ig gabut</p>
+                            <div class="text-left min-w-0">
+                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">Instagram</p>
+                                <p class="text-xs text-gray-400 truncate">@yannstr • ig gabut</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-brand-blue"></i>
+                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
 
                     <!-- TikTok -->
-                    <a href="https://tiktok.com/@yannjamsut" target="_blank" rel="noopener noreferrer" class="glass-btn w-full p-3 rounded-xl flex items-center justify-between group text-white">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-lg bg-brand-blue/10 text-brand-blue flex items-center justify-center text-base">
+                    <a href="https://tiktok.com/@yannjamsut" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-white/5 text-gray-200 flex items-center justify-center text-xl shrink-0">
                                 <i class="fa-brands fa-tiktok"></i>
                             </div>
-                            <div class="text-left">
-                                <p class="text-xs sm:text-sm font-bold group-hover:text-brand-blue transition-colors">TikTok</p>
-                                <p class="text-[10px] text-gray-400">Tiktok gabut | follow</p>
+                            <div class="text-left min-w-0">
+                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">TikTok</p>
+                                <p class="text-xs text-gray-400 truncate">Tiktok gabut | follow</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-brand-blue"></i>
+                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
 
                     <!-- WhatsApp Channel -->
-                    <a href="https://whatsapp.com/channel/0029Vb8Nqbq1HspqQgS6ro22" target="_blank" rel="noopener noreferrer" class="glass-btn w-full p-2.5 rounded-xl flex items-center justify-between group text-white border-brand-blue/30">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-lg bg-brand-blue/20 text-brand-blue flex items-center justify-center text-base">
+                    <a href="https://whatsapp.com/channel/0029Vb8Nqbq1HspqQgS6ro22" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0">
                                 <i class="fa-solid fa-bullhorn"></i>
                             </div>
-                            <div class="text-left">
-                                <p class="text-xs sm:text-sm font-bold text-brand-blue">Saluran WhatsApp</p>
-                                <p class="text-[10px] text-gray-400">Info stok & Rental akun</p>
+                            <div class="text-left min-w-0">
+                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">Saluran WhatsApp</p>
+                                <p class="text-xs text-gray-400 truncate">Info stok & Rental akun</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-xs text-brand-blue"></i>
+                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
                 </div>
 
@@ -296,18 +327,145 @@ Menyediakan jasa JB (Jual Beli) Akun & Rental Akun terpercaya. keamanan dan kepu
     <script>
         const welcomeLayer = document.getElementById('welcomeLayer');
         const welcomeVideo = document.getElementById('welcomeVideo');
+        const welcomeAudio = document.getElementById('welcomeAudio');
         const enterBtn = document.getElementById('enterBtn');
+        const soundToggleBtn = document.getElementById('soundToggleBtn');
+        const soundIcon = document.getElementById('soundIcon');
         const mainCard = document.getElementById('mainCard');
         const bgMusic = document.getElementById('bgMusic');
+        const typedContainer = document.getElementById('typedContainer');
+        const typedText = document.getElementById('typedText');
 
-        window.addEventListener('DOMContentLoaded', () => {
-            if (welcomeVideo) {
-                welcomeVideo.play().catch(e => console.log("Autoplay notice:", e));
+        const phrases = [
+            "Rasa sakit nyatanya bisa membuat orang lebih kuat",
+            "dan...",
+            "Sesuatu yang hancur selalu dapat diperbaiki dan dibangun kembali"
+        ];
+        
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let typingTimeout = null;
+
+        // FUNGSI ANIMASI MENGETIK
+        function typeEffect() {
+            if (!welcomeAudio || welcomeAudio.paused) return;
+
+            const currentPhrase = phrases[phraseIndex];
+
+            if (charIndex < currentPhrase.length) {
+                typedText.textContent += currentPhrase.charAt(charIndex);
+                charIndex++;
+                typingTimeout = setTimeout(typeEffect, 60);
+            } else {
+                typingTimeout = setTimeout(() => {
+                    if (!welcomeAudio || welcomeAudio.paused) return;
+                    
+                    typedText.classList.add('opacity-0');
+
+                    setTimeout(() => {
+                        typedText.textContent = "";
+                        typedText.classList.remove('opacity-0');
+                        charIndex = 0;
+                        phraseIndex = (phraseIndex + 1) % phrases.length;
+                        typingTimeout = setTimeout(typeEffect, 200);
+                    }, 200);
+                }, 2200);
+            }
+        }
+
+        // MULAI ANIMASI
+        function startTyping() {
+            clearTimeout(typingTimeout);
+            typedContainer.classList.remove('opacity-0');
+            typedContainer.classList.add('opacity-100');
+            typedText.classList.remove('opacity-0');
+            
+            if (typedText.textContent === "") {
+                charIndex = 0;
+                typeEffect();
+            } else {
+                typeEffect();
+            }
+        }
+
+        // HENTIKAN & SEMBUNYIKAN TEKS
+        function stopTyping() {
+            clearTimeout(typingTimeout);
+            typedContainer.classList.remove('opacity-100');
+            typedContainer.classList.add('opacity-0');
+        }
+
+        // UPDATE STATUS SOUND & TEKS
+        function updateSoundStatus(isPlaying) {
+            if (isPlaying) {
+                soundIcon.className = "fa-solid fa-volume-high text-red-500 text-lg";
+                startTyping();
+            } else {
+                soundIcon.className = "fa-solid fa-volume-xmark text-red-500 text-lg";
+                stopTyping();
+            }
+        }
+
+        // INTERAKSI SOUND TOGGLE
+        soundToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            if (welcomeAudio.paused) {
+                welcomeAudio.play().then(() => {
+                    updateSoundStatus(true);
+                }).catch(err => console.log("Audio notice:", err));
+            } else {
+                welcomeAudio.pause();
+                updateSoundStatus(false);
             }
         });
 
-        enterBtn.addEventListener('click', () => {
+        // SINKRONISASI INTRO PERTAMA
+        const syncAndPlayIntro = () => {
+            if (welcomeVideo) {
+                welcomeVideo.currentTime = 0;
+                welcomeVideo.play();
+            }
+            if (welcomeAudio) {
+                welcomeAudio.currentTime = 0;
+                welcomeAudio.play().then(() => {
+                    updateSoundStatus(true);
+                }).catch(e => {
+                    console.log("Audio play error:", e);
+                    updateSoundStatus(false);
+                });
+            }
+            document.removeEventListener('click', syncAndPlayIntro);
+            document.removeEventListener('touchstart', syncAndPlayIntro);
+        };
+
+        // AUTO PLAY LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            if (welcomeAudio) {
+                welcomeAudio.play().then(() => {
+                    updateSoundStatus(true);
+                    if (welcomeVideo) {
+                        welcomeVideo.currentTime = 0;
+                        welcomeVideo.play();
+                    }
+                }).catch(() => {
+                    updateSoundStatus(false);
+                    document.addEventListener('click', syncAndPlayIntro);
+                    document.addEventListener('touchstart', syncAndPlayIntro);
+                });
+            }
+        });
+
+        // TOMBOL MASUK PROFIL
+        enterBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
             if (welcomeVideo) welcomeVideo.pause();
+            if (welcomeAudio) {
+                welcomeAudio.pause();
+                welcomeAudio.currentTime = 0;
+            }
+
             if (bgMusic) bgMusic.play().catch(err => console.log("Audio notice:", err));
 
             welcomeLayer.classList.add('opacity-0', 'pointer-events-none');
