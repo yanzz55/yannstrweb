@@ -105,7 +105,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-3.5 sm:p-7 relative select-none">
+<body class="min-h-screen flex items-center justify-center p-3 sm:p-6 relative select-none">
 
     <!-- Canvas Background -->
     <canvas id="bgCanvas" class="fixed inset-0 w-full h-full -z-10 opacity-30 pointer-events-none"></canvas>
@@ -137,7 +137,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none z-10"></div>
 
         <!-- TEKS ANIMASI MENGETIK -->
-        <div id="typedContainer" class="absolute top-[58%] sm:top-[56%] left-6 sm:left-10 z-30 max-w-[230px] sm:max-w-[270px] opacity-0 transition-opacity duration-300 pointer-events-none text-left">
+        <div id="typedContainer" class="absolute top-[58%] sm:top-[56%] left-6 sm:left-10 z-30 max-w-[220px] sm:max-w-[260px] opacity-0 transition-opacity duration-300 pointer-events-none text-left">
             <p id="typedText" class="text-sm sm:text-base font-extrabold text-white tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,1)] leading-relaxed transition-opacity duration-200"></p>
         </div>
 
@@ -158,12 +158,12 @@
         </div>
     </div>
 
-    <!-- 2. MAIN PROFILE CONTAINER (PAS & LEBIH LEGA DIKIT) -->
-    <main id="mainCard" class="w-full max-w-[435px] sm:max-w-[465px] mx-auto transition-all duration-700 relative z-10 my-auto">
+    <!-- 2. MAIN PROFILE CONTAINER -->
+    <main id="mainCard" class="w-full max-w-[420px] sm:max-w-[450px] mx-auto transition-all duration-700 relative z-10 my-auto">
         <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl relative">
             
             <!-- A. BANNER SHOWCASE -->
-            <div class="relative w-full h-38 sm:h-46 bg-slate-950 overflow-hidden">
+            <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden">
                 <img id="gameBanner" 
                      src="https://img3.pixhost.to/images/6392/783382213_media_1791869025159.jpg" 
                      class="w-full h-full object-cover"
@@ -172,12 +172,13 @@
             </div>
 
             <!-- B. PROFILE CONTENT -->
-            <div class="px-5.5 sm:px-6.5 pb-6.5 relative pt-0">
+            <div class="px-5 sm:px-6 pb-6 relative pt-0">
                 
-                <!-- AVATAR (GLASS) & BADGES -->
-                <div class="flex items-end justify-between -mt-13 sm:-mt-15 mb-4.5 relative z-10">
+                <!-- AVATAR (TANPA BORDER BIRU) & BADGES -->
+                <div class="flex items-end justify-between -mt-12 sm:-mt-14 mb-4 relative z-10">
                     <div class="relative">
-                        <div class="w-21 h-21 sm:w-25 sm:h-25 rounded-2xl p-0.5 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
+                        <!-- Border biru diubah menjadi border glass halus -->
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl p-0.5 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
                             <img id="jbAvatar" 
                                  src="https://img3.pixhost.to/images/6392/783382171_media_1791869015731.jpg" 
                                  alt="JB Profile -yannstr" 
@@ -200,11 +201,11 @@
                 </div>
 
                 <!-- HEADER NAME & VERIFIED BADGE SVG -->
-                <div class="mb-4.5">
+                <div class="mb-4">
                     <div class="flex items-center gap-2">
-                        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">YannStr</h1>
+                        <h1 class="text-2xl font-extrabold text-white tracking-tight font-display">YannStr</h1>
                         <span class="inline-flex items-center align-middle cursor-default relative top-[2px] animate-verified-pop opacity-0 scale-0" title="Verified Profile">
-                            <svg aria-label="Verified" width="21" height="21" viewBox="0 0 40 40" fill="#0095F6" xmlns="http://www.w3.org/2000/svg" class="shrink-0 inline-block drop-shadow-[0_0_8px_rgba(0,149,246,0.5)]">
+                            <svg aria-label="Verified" width="20" height="20" viewBox="0 0 40 40" fill="#0095F6" xmlns="http://www.w3.org/2000/svg" class="shrink-0 inline-block drop-shadow-[0_0_8px_rgba(0,149,246,0.5)]">
                                 <path fill-rule="evenodd" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"/>
                             </svg>
                         </span>
@@ -213,24 +214,24 @@
                 </div>
 
                 <!-- INFO CARDS (REGION & STATUS) -->
-                <div class="grid grid-cols-2 gap-3 mb-4.5">
-                    <div class="glass-item p-3.5 rounded-xl flex items-center gap-2.5 min-w-0">
-                        <div class="w-8.5 h-8.5 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-brand-blue text-xs shrink-0">
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="glass-item p-3 rounded-xl flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-brand-blue text-xs shrink-0">
                             <i class="fa-solid fa-earth-asia"></i>
                         </div>
                         <div class="overflow-hidden min-w-0">
                             <p class="text-[9px] text-gray-400 font-bold uppercase">Region</p>
-                            <p class="text-xs sm:text-sm font-semibold text-gray-200 truncate">IND | Bali 🇮🇩</p>
+                            <p class="text-xs font-semibold text-gray-200 truncate">IND | Bali 🇮🇩</p>
                         </div>
                     </div>
 
-                    <div class="glass-item p-3.5 rounded-xl flex items-center gap-2.5 min-w-0">
-                        <div class="w-8.5 h-8.5 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 text-xs shrink-0">
+                    <div class="glass-item p-3 rounded-xl flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 text-xs shrink-0">
                             <i class="fa-solid fa-bolt"></i>
                         </div>
                         <div class="overflow-hidden min-w-0">
                             <p class="text-[9px] text-gray-400 font-bold uppercase">Status</p>
-                            <p class="text-xs sm:text-sm font-semibold text-emerald-400 truncate flex items-center gap-1">
+                            <p class="text-xs font-semibold text-emerald-400 truncate flex items-center gap-1">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
                                 Online
                             </p>
@@ -239,14 +240,14 @@
                 </div>
 
                 <!-- ABOUT ME -->
-                <div class="mb-4.5 glass-item p-3.5 sm:p-4 rounded-xl">
-                    <h2 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <div class="mb-4 glass-item p-3.5 rounded-xl">
+                    <h2 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                         <i class="fa-solid fa-user text-brand-blue"></i> Tentang Saya
                     </h2>
                     <p class="text-gray-300 text-xs sm:text-sm leading-relaxed break-words">
-                        Halo! Nama saya <strong class="text-white">Yann</strong>, seorang pelajar jurusan 11 TJKT berusia 16 tahun asal Karangasem, Bali.<br><br>
+                        Halo! Nama saya <strong class="text-white">Yann</strong>, seorang pelajar XI TJKT berusia 16 tahun asal Karangasem, Bali.<br><br>
                         Saya menyediakan jasa <strong>Jual Beli (JB) Akun & Rental Akun</strong> terpercaya. Keamanan, kenyamanan, serta kepuasan pelanggan dalam setiap transaksi selalu menjadi prioritas utama saya.<br><br>
-                        <strong class="text-brand-blue">Butuh akun atau mau sewa rental akun?</strong> Langsung hubungi media sosial saya di bawah!
+                        <strong class="text-brand-blue">Butuh akun? atau mau rental akun?</strong> Langsung hubungi media sosial saya di bawah
                     </p>
                 </div>
 
@@ -263,7 +264,7 @@
                                 <i class="fa-brands fa-whatsapp"></i>
                             </div>
                             <div class="text-left min-w-0">
-                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">WhatsApp Direct</p>
+                                <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">WhatsApp</p>
                                 <p class="text-xs text-gray-400 truncate">Order / Transaksi</p>
                             </div>
                         </div>
@@ -278,7 +279,7 @@
                             </div>
                             <div class="text-left min-w-0">
                                 <p class="text-sm font-extrabold group-hover:text-brand-blue transition-colors truncate">Instagram</p>
-                                <p class="text-xs text-gray-400 truncate">@yannstr • ig gabut</p>
+                                <p class="text-xs text-gray-400 truncate">ig gabut | follow</p>
                             </div>
                         </div>
                         <i class="fa-solid fa-chevron-right text-sm text-gray-400 group-hover:text-brand-blue group-hover:translate-x-0.5 transition-all shrink-0 ml-2"></i>
@@ -337,9 +338,9 @@
         const typedText = document.getElementById('typedText');
 
         const phrases = [
-            "Rasa sakit nyatanya bisa membuat orang lebih kuat",
+            "Rasa sakit nyatanya bisa membuat orang lebih kuat !",
             "dan...",
-            "Sesuatu yang hancur selalu dapat diperbaiki dan dibangun kembali"
+            "Sesuatu yang hancur selalu dapat diperbaiki dan dibangun kembali."
         ];
         
         let phraseIndex = 0;
